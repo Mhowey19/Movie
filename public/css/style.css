@@ -1,0 +1,30 @@
+.movie-list {
+	display: flex;
+	height: auto;
+	width: 100%;
+	flex-direction: column;
+}
+.movie-container {
+	background-color: bisque;
+	border: black solid 2px;
+	grid-template-columns: 1fr 3fr;
+	grid-row: repeat(3, 1fr);
+	display: grid;
+}
+
+.movie-img {
+	grid-column: 1;
+	grid-row: 1/2;
+}
+.movie-title {
+	max-width: 10rem;
+	grid-row: 1;
+	grid-column: 2;
+}
+
+.movie-overview {
+	margin-top: 3rem;
+	max-width: 100%;
+	grid-row: 1;
+	grid-column: 2;
+}
