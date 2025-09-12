@@ -31,12 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>`;
 				})
 				.join("");
-
-			document.getElementById("movieContainer").onbeforematch((el)=>{
-				el.addEventListener('click',async(e) =>{
-					const movieId = el.
-				}
-			});
 		} catch (err) {
 			console.error(err);
 			movieListDisplay.innerHTML = "<p>Error fetching movies</p>";
