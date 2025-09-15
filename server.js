@@ -4,8 +4,7 @@ const { movieSimilar, movieList } = require("./src/utils/utils");
 require("dotenv").config();
 
 const app = express();
-
-// serve static files (CSS, JS, images) from /public
+// serve static files from /public
 const publicDir = path.join(__dirname, "public");
 app.use(express.static(publicDir));
 
@@ -14,7 +13,7 @@ app.get("/", (req, res) => {
 	res.sendFile(path.join(publicDir, "index.html"));
 });
 
-// ✅ search movies by name
+// search movies by name
 app.get("/api/movies", async (req, res) => {
 	const movieName = req.query.name || req.query.query;
 	if (!movieName) return res.json([]);

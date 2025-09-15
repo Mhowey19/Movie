@@ -18,9 +18,10 @@ const movieList = async (movie) => {
 	try {
 		const res = await fetch(url, options);
 		const json = await res.json();
-
+		//if there is not data within json it will return an empty array
 		if (!json.results) return [];
 
+		//returns the first 10 movies searched with their id, title, img, and overview/description
 		return json.results.slice(0, 10).map((data) => ({
 			id: data.id,
 			title: data.title,
@@ -28,6 +29,7 @@ const movieList = async (movie) => {
 			overview: data.overview,
 		}));
 	} catch (err) {
+		//if try catches an error it will log the error and return an empty array
 		console.error("Error in movieList:", err);
 		return [];
 	}
@@ -41,16 +43,17 @@ const movieSimilar = async (movieId) => {
 		method: "GET",
 		headers: {
 			accept: "application/json",
-			Authorization: `Bearer ${api}`, // must be v4 token
+			Authorization: `Bearer ${api}`,
 		},
 	};
 
 	try {
 		const res = await fetch(url, options);
 		const json = await res.json();
-
+		//if there is not data within json it will return an empty array
 		if (!json.results) return [];
 
+		//Return the first 10 movie's id, title, img, and overview/description
 		return json.results.slice(0, 10).map((data) => ({
 			id: data.id,
 			title: data.title,
@@ -58,9 +61,11 @@ const movieSimilar = async (movieId) => {
 			overview: data.overview,
 		}));
 	} catch (err) {
+		//Returns a error if there is an error
 		console.error("Error in movieSimilar:", err);
 		return [];
 	}
 };
 
+//exports the movieList and movieSimilar functions for use within the frontend js
 module.exports = { movieList, movieSimilar };

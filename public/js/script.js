@@ -48,17 +48,22 @@ document.addEventListener("DOMContentLoaded", () => {
 						const similar = await res.json(); //Data of the similar movies
 						movieListDisplay.innerHTML = div.outerHTML;
 						// Shows similar mvoies to the DOM
-						movieSimilarDisplay.innerHTML = similar
-							.map(
-								(data) => `
+
+						if (similar.length === 0) {
+							movieSimilarDisplay.innerHTML = `<h2>No similar movies</h2>`;
+						} else {
+							movieSimilarDisplay.innerHTML = similar
+								.map(
+									(data) => `
 									<div class="movie-container_similar">
-										<img src="https://image.tmdb.org/t/p/w200${data.img}" alt="${data.title}" />
-										<h4>${data.title}</h4>
-										<p>${data.overview}</p>
+										<img src="https://image.tmdb.org/t/p/w200${data.img}" alt="${data.title}" class = "movie-title"/>
+										<h4 class='movie-title'>${data.title}</h4>
+										<p class='movie-overview'>${data.overview}</p>
 									</div>
 								`
-							)
-							.join("");
+								)
+								.join("");
+						}
 					} catch (err) {
 						console.error("Error fetching similar movies:", err);
 						movieSimilarDisplay.innerHTML = "<p>Error loading similar movies</p>";
