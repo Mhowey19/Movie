@@ -15,8 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		try {
 			// ask backend for movie list
-			const res = await fetch(`https://your-vercel-app.vercel.app/api/movies?name=${encodeURIComponent(movieName)}`);
-
+			const res = await fetch(`/api/movies?name=${encodeURIComponent(movieName)}`);
 			const movies = await res.json();
 
 			if (movies.length === 0) {
