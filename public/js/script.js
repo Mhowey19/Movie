@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		try {
 			// ask backend for movie list
-			const res = await fetch(`/api/movies?name=${encodeURIComponent(movieName)}`);
+			const res = await fetch(`https://your-vercel-app.vercel.app/api/movies?name=${encodeURIComponent(movieName)}`);
+
 			const movies = await res.json();
 
 			if (movies.length === 0) {
@@ -36,18 +37,18 @@ document.addEventListener("DOMContentLoaded", () => {
 				)
 				.join("");
 
-			// add click listener to each movie → fetch similar
+			// Allows each element with the .movie-container class to become clickable
 			document.querySelectorAll(".movie-container").forEach((div) => {
 				div.addEventListener("click", async () => {
-					const movieId = div.dataset.id; // TMDB movie id
+					const movieId = div.dataset.id; // Id of the movie clicked
 					console.log("Clicked movie ID:", movieId);
 
 					try {
-						// fetch similar movies
+						// Fetches the movie's api data to the Dom
 						const res = await fetch(`/api/movies/similar?id=${movieId}`);
-						const similar = await res.json();
+						const similar = await res.json(); //Data of the similar movies
 						movieListDisplay.innerHTML = div.outerHTML;
-						// render similar movies
+						// Shows similar mvoies to the DOM
 						movieSimilarDisplay.innerHTML = similar
 							.map(
 								(data) => `
@@ -66,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				});
 			});
 		} catch (err) {
+			//Displays error message to the DOM
 			console.error("Error fetching movies:", err);
 			movieListDisplay.innerHTML = "<p>Error fetching movies</p>";
 		}
