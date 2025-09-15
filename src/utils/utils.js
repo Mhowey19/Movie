@@ -21,11 +21,11 @@ const movieList = async (movie) => {
 
 		if (!json.results) return [];
 
-		return json.results.slice(0, 10).map((m) => ({
-			id: m.id,
-			title: m.title,
-			img: m.poster_path,
-			overview: m.overview,
+		return json.results.slice(0, 10).map((data) => ({
+			id: data.id,
+			title: data.title,
+			img: data.poster_path,
+			overview: data.overview,
 		}));
 	} catch (err) {
 		console.error("Error in movieList:", err);
@@ -51,11 +51,11 @@ const movieSimilar = async (movieId) => {
 
 		if (!json.results) return [];
 
-		return json.results.slice(0, 10).map((m) => ({
-			id: m.id,
-			title: m.title,
-			img: m.poster_path,
-			overview: m.overview,
+		return json.results.slice(0, 10).map((data) => ({
+			id: data.id,
+			title: data.title,
+			img: data.poster_path,
+			overview: data.overview,
 		}));
 	} catch (err) {
 		console.error("Error in movieSimilar:", err);

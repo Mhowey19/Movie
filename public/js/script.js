@@ -1,18 +1,21 @@
 const userInput = document.getElementById("userInput");
 const form = document.getElementById("userInputForm");
 const movieListDisplay = document.getElementById("movieList");
+const movieSimilarDisplay = document.getElementById("movieSimilar"); // where similar movies go
 
 document.addEventListener("DOMContentLoaded", () => {
 	form.addEventListener("submit", async (e) => {
-		e.preventDefault(); // stop page from refreshing
-		const movieName = userInput.value.trim(); // read input
+		e.preventDefault(); // stop page reload
+		const movieName = userInput.value.trim();
+
 		if (!movieName) {
 			movieListDisplay.innerHTML = "<p>Please input a movie title</p>";
 			return;
 		}
+
 		try {
-			// ask the backend for movies
-			const res = await fetch(`/movies?name=${encodeURIComponent(movieName)}`);
+			// ask backend for movie list
+			const res = await fetch(`/api/movies?name=${encodeURIComponent(movieName)}`);
 			const movies = await res.json();
 
 			if (movies.length === 0) {
@@ -20,19 +23,50 @@ document.addEventListener("DOMContentLoaded", () => {
 				return;
 			}
 
-			// render movies as HTML
+			// render searched movies
 			movieListDisplay.innerHTML = movies
-				.map((movie) => {
-					return `
-            <div class="movie-container" id='movieContainer'>
-            <img src="https://image.tmdb.org/t/p/w200${movie.img}" class='movie-img' alt="${movie.title}" />
-            <h3 class='movie-title'>${movie.title}</h3>
-            <p class='movie-overview'>${movie.overview}</p>
-            </div>`;
-				})
+				.map(
+					(movie) => `
+						<div class="movie-container" data-id="${movie.id}">
+							<img src="https://image.tmdb.org/t/p/w200${movie.img}" class="movie-img" alt="${movie.title}" />
+							<h3 class="movie-title">${movie.title}</h3>
+							<p class="movie-overview">${movie.overview}</p>
+						</div>
+					`
+				)
 				.join("");
+
+			// add click listener to each movie → fetch similar
+			document.querySelectorAll(".movie-container").forEach((div) => {
+				div.addEventListener("click", async () => {
+					const movieId = div.dataset.id; // TMDB movie id
+					console.log("Clicked movie ID:", movieId);
+
+					try {
+						// fetch similar movies
+						const res = await fetch(`/api/movies/similar?id=${movieId}`);
+						const similar = await res.json();
+						movieListDisplay.innerHTML = div.outerHTML;
+						// render similar movies
+						movieSimilarDisplay.innerHTML = similar
+							.map(
+								(data) => `
+									<div class="movie-container_similar">
+										<img src="https://image.tmdb.org/t/p/w200${data.img}" alt="${data.title}" />
+										<h4>${data.title}</h4>
+										<p>${data.overview}</p>
+									</div>
+								`
+							)
+							.join("");
+					} catch (err) {
+						console.error("Error fetching similar movies:", err);
+						movieSimilarDisplay.innerHTML = "<p>Error loading similar movies</p>";
+					}
+				});
+			});
 		} catch (err) {
-			console.error(err);
+			console.error("Error fetching movies:", err);
 			movieListDisplay.innerHTML = "<p>Error fetching movies</p>";
 		}
 	});
